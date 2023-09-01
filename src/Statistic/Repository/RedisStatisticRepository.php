@@ -2,7 +2,6 @@
 
 namespace App\Statistic\Repository;
 
-use App\Statistic\Shared\Statistic;
 use Predis\Client;
 use RedisException;
 
@@ -17,17 +16,15 @@ class RedisStatisticRepository implements StatisticRepositoryInterface
     }
 
     /**
-     * @return Statistic[]
      * @throws RedisException
      */
     public function getStatistic(): array
     {
         $statistic = [];
         foreach ($this->redis->keys(self::STATISTIC_KEY_PREFIX . '*') as $key) {
-            $statistic[] = new Statistic(
-                mb_substr($key, mb_strlen(self::STATISTIC_KEY_PREFIX)),
-                $this->redis->get($key)
-            );
+            $statistic[] = [
+                mb_substr($key, mb_strlen(self::STATISTIC_KEY_PREFIX)) => $this->redis->get($key)
+            ];
         }
 
         return $statistic;
