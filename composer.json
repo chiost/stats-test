@@ -6,11 +6,9 @@
     "slim/slim": "^4.12",
     "predis/predis": "^2.2",
     "monolog/monolog": "^3.4",
-    "symfony/intl": "^6.3",
     "php-di/php-di": "^7.0",
     "slim/psr7": "^1.6",
-    "ext-redis": "*",
-    "ext-mbstring": "*"
+    "ext-redis": "*"
   },
   "autoload": {
     "psr-4": {

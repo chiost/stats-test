@@ -12,4 +12,13 @@ scenarios:
           url: "/statistic/it"
       - post:
           url: "/statistic/us"
+      - post:
+          url: "/statistic/ua"
+      - post:
+          url: "/statistic/gb"
+      - post:
+          url: "/statistic/de"
+      - get:
+          url: "/statistic"
+
 

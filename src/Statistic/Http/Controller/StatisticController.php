@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Statistic\Http\Controller;
 
 use App\Statistic\StatisticService;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Intl\Countries;
 use Throwable;
 
 readonly class StatisticController
@@ -34,7 +34,7 @@ readonly class StatisticController
     {
         $country = $args['country'];
 
-        if (!$country || !array_key_exists(strtoupper($country), Countries::getNames())) {
+        if (!$country || !$this->validateCountryCode($country)) {
             $response->getBody()->write(json_encode([
                 'error' => 'Invalid country code'
             ]));
@@ -42,7 +42,7 @@ readonly class StatisticController
         }
 
         try {
-            $this->service->updateCountry($country);
+            $this->service->updateCountry(strtolower($country));
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
             $response->getBody()->write(json_encode([
@@ -52,5 +52,23 @@ readonly class StatisticController
         }
 
         return $response->withStatus(201);
+    }
+
+    /**
+     * This method checks if string have 2 letters
+     * and checks if they in range of A-Z or a-z by ASCII table
+     *
+     * @param string $country
+     * @return bool
+     */
+    private function validateCountryCode(string $country): bool
+    {
+        if (strlen($country) !== 2) return false;
+
+        $a = ord($country[0]);
+        $b = ord($country[1]);
+
+        return (($a >= 65 && $a <= 90) || ($a >= 97 && $a <= 122)) &&
+            (($b >= 65 && $b <= 90) || ($b >= 97 && $b <= 122));
     }
 }
